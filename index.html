@@ -31,11 +31,13 @@ body{
   top:0; left:0;
   padding:0;
   width:100%;
-  height:80px;
+  height:60px;
   background:url('frame.png') repeat-x;
-  background-size:auto 80px;
-  z-index:20;
+  background-size:auto 60px;
+  width:100%;
+  position: fixed;
 }
+
 
 /* Curtains */
 .curtain-wrapper{
@@ -65,6 +67,7 @@ body{
   font-size:18px;
   font-weight:600;
   cursor:pointer;
+  font-style: italic;
 }
 
 /* Layout */
@@ -110,6 +113,23 @@ body{
   font-weight:600;
   cursor:pointer;
 }
+.circle1{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:radial-gradient(circle,#f7e6a0,#caa03d);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+}
+.circle1.revealed{
+  background:#fff;
+}
+
+
 .circle.revealed{
   background:#fff;
 }
@@ -252,6 +272,54 @@ body{
   color:#b08d2c;
 }
 
+.navigate-wrapper {
+  text-align: center;
+  margin: 16px 0 24px; /* controls gap from venue */
+  font-style:italic;
+  display: none;   /* hidden initially */
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.navigate-wrapper.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.navigate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  background: #075E54; /* slightly darker than background */
+  color: #F7EFE5; 
+  text-decoration: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navigate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.3);
+  background: #0B6E4F;
+}
+
+.map-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.whatsapp-wrapper {
+  display: none;       /* hidden initially */
+  text-align: center;
+  margin: 24px 0 32px;
+  font-style:italic;
+}
+
 
 </style>
 </head>
@@ -269,7 +337,7 @@ body{
 <div class="curtain-wrapper" id="curtains">
   <div class="curtain left"></div>
   <div class="curtain right"></div>
-  <button class="reveal-btn" onclick="openCurtains()">Click Here!</button>
+  <button class="reveal-btn" onclick="openCurtains()">Let's Start!</button>
 </div>
 
 <div class="container">
@@ -292,6 +360,7 @@ and bless us as we begin this beautiful journey together.
   <div class="circle" onclick="reveal(this,'8')"></div>
   <div class="circle" onclick="reveal(this,'March')"></div>
   <div class="circle" onclick="reveal(this,'2026')"></div>
+  <div class="circle1" onclick="reveal(this,'10AM onwards')"></div>
 </div>
 
 <!-- Countdown -->
@@ -314,6 +383,13 @@ and bless us as we begin this beautiful journey together.
     S Kota, Visakhapatnam
   </p>
 </div>
+<!-- Navigation Button -->
+<div class="navigate-wrapper" id="navigateBtn">
+  <a href="https://maps.app.goo.gl/4Nh4x2ndXnEx8YPF6" target="_blank" class="navigate-btn">
+    <img src="google-maps.png" class="map-icon">
+    <span>Navigate</span>
+  </a>
+</div>
 
 <div class="love-gallery" id="loveGallery">
   <h3 class="gallery-title">Love Gallery</h3>
@@ -325,6 +401,22 @@ and bless us as we begin this beautiful journey together.
   </div>
 
   <div class="dots" id="galleryDots"></div>
+</div>
+
+<!-- WhatsApp Love Button -->
+<div class="whatsapp-wrapper" id="whatsappBtn">
+  <a
+    href="https://wa.me/917680016710"
+    target="_blank"
+    class="navigate-btn"
+  >
+    <img
+      src="whatsApp.png"
+      alt="WhatsApp"
+      class="map-icon"
+    />
+    <span>Send us your love</span>
+  </a>
 </div>
 
 
@@ -346,10 +438,13 @@ we look forward to celebrating this special day with you.
 </div>
 
 
+
+
 <script>
 let revealed = 0;
 let countdownInterval = null;
 const loveGallery = document.getElementById("loveGallery");
+
 
 /* ======= WEDDING DATE (CHANGE ONLY HERE IF NEEDED) ======= */
 const WEDDING_DATE = {
@@ -384,15 +479,24 @@ function reveal(el,text){
   el.textContent = text;
   revealed++;
 
-  if(revealed === 3){
-    confetti({ particleCount: 220, spread: 90, origin:{ y:0.6 }});
-    countdown.style.display = 'block';
-    startCountdown();
-    setTimeout(()=>venue.style.display='block',1800);
-setTimeout(()=>loveGallery.style.display='block',2800); // 👈 ADD THIS
-setTimeout(()=>note.style.display='block',3800);
+  if(revealed === 4){
+  confetti({ particleCount: 5000, spread: 243, origin:{ y:0.6 }});
+  countdown.style.display = 'block';
+  startCountdown();
 
-  }
+  setTimeout(()=>{
+    venue.style.display = 'block';
+    document.getElementById("navigateBtn").style.display = "block"; // ✅ ADD THIS
+  },1800);
+  setTimeout(()=>{
+  loveGallery.style.display = 'block';
+  document.getElementById("whatsappBtn").style.display = "block"; // ✅ ADD THIS
+},2500);
+
+  setTimeout(()=>loveGallery.style.display='block',2800);
+  setTimeout(()=>note.style.display='block',3800);
+}
+
 }
 
 function startCountdown(){
